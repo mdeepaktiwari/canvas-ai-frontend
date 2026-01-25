@@ -2,7 +2,7 @@
 
 React app for generating and managing content and images. Built with Vite, React Router, and Tailwind CSS.
 
-**Live App:** https://generator-cms-frontend.vercel.app/
+**Live App:** https://canvas-ai-frontend-one.vercel.app/
 
 ## Setup
 
