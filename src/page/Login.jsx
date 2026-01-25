@@ -49,8 +49,9 @@ export default function Login() {
       const { data: res } = await signIn(data);
       const token = res?.data?.token;
       const name = res?.data?.name;
+      const credits = res?.data?.credits || 0;
       if (token) {
-        login(token, name);
+        login(token, name, credits);
         reset();
         navigate("/");
       }

@@ -12,6 +12,8 @@ import {
   LoadingIcon,
 } from "../component/Icons";
 import { downloadImage } from "../utils/global";
+import { useAuth } from "../context/auth";
+import { toast } from "react-toastify";
 
 const schema = z.object({
   resolution: z.string().min(1, "Please select a resolution"),
@@ -22,6 +24,7 @@ export default function GenerateImage() {
   const [generatedImage, setGeneratedImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const { updateCredits } = useAuth();
   const {
     register,
     handleSubmit,
@@ -39,9 +42,20 @@ export default function GenerateImage() {
     try {
       const { data: res } = await generateImage(data);
       setGeneratedImage(res?.data?.image);
+
+      if (res?.data?.creditsRemaining !== undefined) {
+        updateCredits(res.data.creditsRemaining);
+        toast.success(
+          `Image generated! Credits remaining: ${res.data.creditsRemaining}`,
+        );
+      }
     } catch (error) {
-      console.log("Error in generating image: ".error);
-      setError("Failed to generate image. Please try again");
+      console.log("Error in generating image:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to generate image. Please try again";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

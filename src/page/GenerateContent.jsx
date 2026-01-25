@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Navigate, useParams } from "react-router-dom";
 import { PAGES } from "../constant";
 import { handleCopy } from "../utils/global";
+import { useAuth } from "../context/auth";
 
 const schema = z.object({
   content: z.string().min(1, "Content is required"),
@@ -17,6 +18,7 @@ export default function GenerateContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const { action } = useParams();
+  const { updateCredits } = useAuth();
   const pageContent = PAGES[action];
 
   if (!pageContent) {
@@ -40,9 +42,20 @@ export default function GenerateContent() {
     try {
       const { data: res } = await pageContent.handler(data);
       setGeneratedContent(res?.data?.content);
+
+      if (res?.data?.creditsRemaining !== undefined) {
+        updateCredits(res.data.creditsRemaining);
+        toast.success(
+          `Content generated! Credits remaining: ${res.data.creditsRemaining}`,
+        );
+      }
     } catch (error) {
-      console.log("Error in generating content: ".error);
-      setError("Failed to generate content. Please try again");
+      console.log("Error in generating content:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to generate content. Please try again";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

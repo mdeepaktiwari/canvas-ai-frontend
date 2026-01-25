@@ -16,6 +16,7 @@ const GenerateContent = lazy(() => import("./page/GenerateContent"));
 const ImageHistory = lazy(() => import("./page/ImageHistory"));
 const ContentHistory = lazy(() => import("./page/ContentHistory"));
 const ContentDetails = lazy(() => import("./page/ContentDetails"));
+const Pricing = lazy(() => import("./page/Pricing"));
 
 function App() {
   return (
@@ -93,6 +94,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ContentDetails />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="/pricing"
+              element={
+                <ProtectedRoute>
+                  <Pricing />
                 </ProtectedRoute>
               }
             ></Route>
