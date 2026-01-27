@@ -94,3 +94,10 @@ export const PAGES = {
     handler: generateSeoContent,
   },
 };
+
+export const SERVER_STATUS = {
+  IDLE: "idle",
+  WAKING: "waking",
+  READY: "ready",
+  ERROR: "error",
+};

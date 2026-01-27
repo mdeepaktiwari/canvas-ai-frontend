@@ -1,7 +1,8 @@
 import axios from "axios";
+import { BACKEND_URL } from "./services/endpoints";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: BACKEND_URL,
 });
 
 api.interceptors.request.use(
@@ -15,7 +16,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

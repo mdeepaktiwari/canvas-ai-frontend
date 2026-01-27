@@ -1,42 +1,92 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.server-banner-text {
+  position: relative;
+  height: 2rem;
+  overflow: hidden;
+  min-width: 280px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.server-banner-text p {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(100%);
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes banner-slide {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
   }
-  to {
-    transform: rotate(360deg);
+  8% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  28% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  36% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+.animate-slide {
+  animation: banner-slide 9s ease-in-out infinite;
+}
+
+.animate-slide:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.animate-slide:nth-child(2) {
+  animation-delay: 3s;
+}
+
+.animate-slide:nth-child(3) {
+  animation-delay: 6s;
+}
+
+.loading-dot span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: white;
+  animation: loading-bounce 0.9s infinite ease-in-out;
+}
+
+.loading-dot span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dot span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.loading-dot span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes loading-bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  40% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
 }

@@ -3,8 +3,14 @@ import { Flip, ToastContainer } from "react-toastify";
 import Nav from "./component/Nav";
 import { AuthProvider } from "./context/auth";
 import ProtectedRoute from "./component/ProtectedRoute";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import LoadingSpinner from "./component/LoadingSpinner";
+import ServerStatusBanner from "./component/ServerStatusBanner";
+import "./App.css";
+import api from "./api";
+import { io } from "socket.io-client";
+import { SERVER_STATUS } from "./constant";
+import { BACKEND_URL } from "./services/endpoints";
 
 const Home = lazy(() => import("./page/Home"));
 const Image = lazy(() => import("./page/Image"));
@@ -19,6 +25,51 @@ const ContentDetails = lazy(() => import("./page/ContentDetails"));
 const Pricing = lazy(() => import("./page/Pricing"));
 
 function App() {
+  const [serverStatus, setServerStatus] = useState(SERVER_STATUS.IDLE);
+
+  useEffect(() => {
+    let socket;
+
+    const wakeServer = async () => {
+      try {
+        setServerStatus(SERVER_STATUS.WAKING);
+        await api.get("/health");
+
+        socket = io(BACKEND_URL, {
+          withCredentials: true,
+          transports: ["websocket", "polling"],
+        });
+
+        socket.on("connect", () => {
+          console.log("WebSocket connected", socket.id);
+        });
+
+        socket.on("server_status", (payload) => {
+          if (payload?.status === SERVER_STATUS.READY) {
+            setServerStatus(SERVER_STATUS.READY);
+          }
+        });
+
+        socket.on("connect_error", () => {
+          setServerStatus(SERVER_STATUS.ERROR);
+        });
+
+        // handle if you want to show banner again
+        // socket.on("disconnect", () => {});
+      } catch (error) {
+        setServerStatus(SERVER_STATUS.ERROR);
+      }
+    };
+
+    wakeServer();
+
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
+  }, []);
+
   return (
     <BrowserRouter>
       <ToastContainer
@@ -35,6 +86,7 @@ function App() {
         transition={Flip}
       />
       <AuthProvider>
+        {serverStatus === SERVER_STATUS.WAKING && <ServerStatusBanner />}
         <Nav />
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
