@@ -25,7 +25,7 @@ const ContentDetails = lazy(() => import("./page/ContentDetails"));
 const Pricing = lazy(() => import("./page/Pricing"));
 
 function App() {
-  const [serverStatus, setServerStatus] = useState(SERVER_STATUS.IDLE);
+  const [serverStatus, setServerStatus] = useState(SERVER_STATUS.WAKING);
 
   useEffect(() => {
     let socket;
@@ -46,7 +46,9 @@ function App() {
 
         socket.on("server_status", (payload) => {
           if (payload?.status === SERVER_STATUS.READY) {
-            setServerStatus(SERVER_STATUS.READY);
+            setTimeout(() => {
+              setServerStatus(SERVER_STATUS.READY);
+            }, 1000);
           }
         });
 
@@ -86,7 +88,7 @@ function App() {
         transition={Flip}
       />
       <AuthProvider>
-        {serverStatus === SERVER_STATUS.WAKING && <ServerStatusBanner />}
+        <ServerStatusBanner visible={serverStatus === SERVER_STATUS.WAKING} />
         <Nav />
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>

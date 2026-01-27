@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export default function ServerStatusBanner() {
+export default function ServerStatusBanner({ visible = true }) {
+  const [shouldRender, setShouldRender] = useState(visible);
+
+  useEffect(() => {
+    if (visible) {
+      setShouldRender(true);
+      return;
+    }
+
+    const hideTimeout = setTimeout(() => {
+      setShouldRender(false);
+    }, 500);
+
+    return () => clearTimeout(hideTimeout);
+  }, [visible]);
+
+  if (!shouldRender) return null;
+
   return (
-    <div className="w-full bg-indigo-600 text-white shadow-lg">
+    <div
+      className={`server-status-banner w-full bg-indigo-600 text-white shadow-lg ${
+        visible ? "" : "is-hidden"
+      }`}
+    >
       <div className="server-banner">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-center gap-3">
@@ -17,7 +38,7 @@ export default function ServerStatusBanner() {
                 Starting server... This will take a moment
               </p>
               <p className="text-sm font-medium animate-slide">
-                Free tier requires ~30 seconds to wake up
+                Server may take ~30 seconds to start
               </p>
               <p className="text-sm font-medium animate-slide">
                 Thanks for your patience! Almost ready...

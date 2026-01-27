@@ -5,6 +5,25 @@
   min-width: 280px;
 }
 
+.server-status-banner {
+  overflow: hidden;
+  transform: translateY(0);
+  opacity: 1;
+  max-height: 80px;
+  transition:
+    transform 500ms ease,
+    opacity 500ms ease,
+    max-height 500ms ease;
+  will-change: transform, opacity, max-height;
+}
+
+.server-status-banner.is-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  max-height: 0;
+  pointer-events: none;
+}
+
 .server-banner-text p {
   position: absolute;
   left: 0;
@@ -42,7 +61,7 @@
 }
 
 .animate-slide {
-  animation: banner-slide 9s ease-in-out infinite;
+  animation: banner-slide 12s ease-in-out infinite;
 }
 
 .animate-slide:nth-child(1) {
@@ -50,11 +69,11 @@
 }
 
 .animate-slide:nth-child(2) {
-  animation-delay: 3s;
+  animation-delay: 4s;
 }
 
 .animate-slide:nth-child(3) {
-  animation-delay: 6s;
+  animation-delay: 8s;
 }
 
 .loading-dot span {
