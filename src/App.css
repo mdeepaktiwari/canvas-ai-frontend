@@ -42,15 +42,15 @@
     transform: translateY(100%);
     opacity: 0;
   }
-  8% {
+  5% {
     transform: translateY(0);
     opacity: 1;
   }
-  28% {
+  20% {
     transform: translateY(0);
     opacity: 1;
   }
-  36% {
+  25% {
     transform: translateY(-100%);
     opacity: 0;
   }
@@ -61,7 +61,7 @@
 }
 
 .animate-slide {
-  animation: banner-slide 12s ease-in-out infinite;
+  animation: banner-slide 16s ease-in-out infinite;
 }
 
 .animate-slide:nth-child(1) {
@@ -74,6 +74,10 @@
 
 .animate-slide:nth-child(3) {
   animation-delay: 8s;
+}
+
+.animate-slide:nth-child(4) {
+  animation-delay: 12s;
 }
 
 .loading-dot span {

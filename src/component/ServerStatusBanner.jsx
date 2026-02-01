@@ -41,6 +41,9 @@ export default function ServerStatusBanner({ visible = true }) {
                 Server may take ~30 seconds to start
               </p>
               <p className="text-sm font-medium animate-slide">
+                The backend server is hosted on free tier
+              </p>
+              <p className="text-sm font-medium animate-slide">
                 Thanks for your patience! Almost ready...
               </p>
             </div>
