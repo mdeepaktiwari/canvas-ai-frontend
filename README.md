@@ -3,6 +3,7 @@
 React app for generating and managing content and images. Built with Vite, React Router, and Tailwind CSS.
 
 **Live App:** https://canvas-ai-frontend-one.vercel.app/
+**Backend Repo:** https://github.com/mdeepaktiwari/canvas-ai-backend
 
 ## Setup
 
