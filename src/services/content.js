@@ -1,4 +1,4 @@
-import api from "../api";
+import api, { fetchStreamedResponse } from "../api";
 import {
   REWRITE_URL,
   EXPAND_URL,
@@ -11,23 +11,23 @@ import {
 } from "./endpoints";
 
 export const rewriteContent = (data) => {
-  return api.post(REWRITE_URL, data);
+  return fetchStreamedResponse(REWRITE_URL, data);
 };
 
 export const expandContent = (data) => {
-  return api.post(EXPAND_URL, data);
+  return fetchStreamedResponse(EXPAND_URL, data);
 };
 
 export const shortenContent = (data) => {
-  return api.post(SHORTEN_URL, data);
+  return fetchStreamedResponse(SHORTEN_URL, data);
 };
 
 export const generateArticle = (data) => {
-  return api.post(ARTICLE_URL, data);
+  return fetchStreamedResponse(ARTICLE_URL, data);
 };
 
 export const generateSeoContent = (data) => {
-  return api.post(SEO_CONTENT_URL, data);
+  return fetchStreamedResponse(SEO_CONTENT_URL, data);
 };
 
 export const contentHistory = () => {

@@ -8,13 +8,14 @@ import { Navigate, useParams } from "react-router-dom";
 import { PAGES } from "../constant";
 import { handleCopy } from "../utils/global";
 import { useAuth } from "../context/auth";
+import { getUserCredits } from "../services/payment";
 
 const schema = z.object({
   content: z.string().min(1, "Content is required"),
 });
 
 export default function GenerateContent() {
-  const [generatedContent, setGeneratedContent] = useState(null);
+  const [generatedContent, setGeneratedContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const { action } = useParams();
@@ -37,18 +38,28 @@ export default function GenerateContent() {
   const formHandler = async (data) => {
     setIsSubmitting(true);
     setError(null);
-    setGeneratedContent(null);
+    setGeneratedContent("");
 
     try {
-      const { data: res } = await pageContent.handler(data);
-      setGeneratedContent(res?.data?.content);
+      const response = await pageContent.handler(data);
+      if (!response.ok) throw new Error("Failed to generate content");
 
-      if (res?.data?.creditsRemaining !== undefined) {
-        updateCredits(res.data.creditsRemaining);
-        toast.success(
-          `Content generated! Credits remaining: ${res.data.creditsRemaining}`,
-        );
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let done = false;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+
+        const chunkValue = decoder.decode(value);
+        setGeneratedContent((prev) => prev + chunkValue);
       }
+
+      // update credit
+      const { data: res } = await getUserCredits();
+      if (updateCredits !== undefined) updateCredits(res?.data?.credits);
     } catch (error) {
       console.log("Error in generating content:", error);
       const errorMessage =
@@ -134,7 +145,7 @@ export default function GenerateContent() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
               {pageContent["output-header"]}
             </h2>
-            {generatedContent ? (
+            {generatedContent !== "" ? (
               <div className="space-y-4">
                 <div className="relative rounded-lg overflow-hidden border-2 border-gray-200 bg-gray-50 p-4 min-h-[200px]">
                   <p className="text-gray-600"> {generatedContent}</p>
@@ -149,7 +160,7 @@ export default function GenerateContent() {
                   </button>
                   <button
                     onClick={() => {
-                      setGeneratedContent(null);
+                      setGeneratedContent("");
                       reset();
                     }}
                     className="flex-1 bg-gray-200 text-gray-700 py-2.5 px-4 rounded-lg font-semibold text-sm hover:bg-gray-300 transition-colors"

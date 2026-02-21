@@ -35,3 +35,14 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+export const fetchStreamedResponse = (url, data) => {
+  return fetch(`${BACKEND_URL}${url}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify(data),
+  });
+};
